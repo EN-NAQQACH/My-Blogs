@@ -8,8 +8,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { paraghraph } from '@/styles/Fonts';
 
 function page() {
+    const [email, setemail] = useState();
     const [password, setpassword] = useState();
-    const  [confirmpassword , setconfirmpassword] = useState();
+    const [confirmpassword, setconfirmpassword] = useState();
     const [passwordconfirmvisible, setpasswordconfirmvisible] = useState(false)
     const handlepasswordconfirmvisible = () => {
         setpasswordconfirmvisible(!passwordconfirmvisible)
@@ -19,10 +20,35 @@ function page() {
         setpasswordvisible(!passwordvisible)
     }
 
+    const handleRegisterSubmit = async () => {
+        
+        if (password !== confirmpassword) {
+            alert("Passwords do not match");
+            return;
+        }
+        try {
+            const res = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await res.json();
+            if (res.status === 201) {
+                alert("User created successfully");
+            } else {
+                alert(data.error);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <div className='p-[60px] h-lvh'>
 
-            <div className=' h-fit w-[45%] m-auto rounded-xl shadow-md'>
+            <div className=' h-fit w-[45%] m-auto rounded-xl shadow-md mt-5'>
                 <div className='p-8'>
                     <div className='up '>
                         <p className='text-[20px]'>Sign Up!</p>
@@ -51,7 +77,7 @@ function page() {
                             <label htmlFor="" className='text-[13px] mb-2 block'>Email Adress</label>
                             <div className='flex items-center gap-2 p-2 border rounded-md'>
                                 <EmailOutlinedIcon />
-                                <input type="text" placeholder='Email' className='outline-none w-full text-[12px]' />
+                                <input type="text" name='email' placeholder='Email' className='outline-none w-full text-[12px]' value={email} onChange={(e) => setemail(e.target.value)} />
                             </div>
                         </div>
                         <div >
@@ -59,7 +85,7 @@ function page() {
                             <div className='flex items-center justify-between gap-4 p-2 border rounded-md'>
                                 <div className='flex gap-2 w-[100%]'>
                                     <LockOutlinedIcon />
-                                    <input type={passwordvisible ? "text" : "password"} placeholder='Password' value={password} onChange={(e) => setpassword(e.target.value)} className='  grow outline-none  text-[12px]' />
+                                    <input type={passwordvisible ? "text" : "password"} placeholder='Password' name='password' value={password} onChange={(e) => setpassword(e.target.value)} className='  grow outline-none  text-[12px]' />
                                 </div>
                                 <div>
                                     {passwordvisible ? <VisibilityOffIcon className='text-gray-300 cursor-pointer' onClick={handlepasswordvisible} /> : <VisibilityOutlinedIcon className='text-gray-300 cursor-pointer' onClick={handlepasswordvisible} />}
@@ -72,7 +98,7 @@ function page() {
                             <div className='flex items-center justify-between gap-4 p-2 border rounded-md'>
                                 <div className='flex gap-2 w-[100%]'>
                                     <LockOutlinedIcon />
-                                    <input type={passwordconfirmvisible ? "text" : "password"} placeholder='Password' value={confirmpassword} onChange={(e) => setconfirmpassword(e.target.value)} className='  grow outline-none  text-[12px]' />
+                                    <input type={passwordconfirmvisible ? "text" : "password"} placeholder='Password' name='repetedPassword' value={confirmpassword} onChange={(e) => setconfirmpassword(e.target.value)} className='  grow outline-none  text-[12px]' />
                                 </div>
                                 <div>
                                     {passwordconfirmvisible ? <VisibilityOffIcon className='text-gray-300 cursor-pointer' onClick={handlepasswordconfirmvisible} /> : <VisibilityOutlinedIcon className='text-gray-300 cursor-pointer' onClick={handlepasswordconfirmvisible} />}
@@ -80,7 +106,7 @@ function page() {
                                 </div>
                             </div>
                         </div>
-                        <button className='bg-[#1d5ce2] text-white p-3 rounded-md w-[100%] mt-2'>Sign Up</button>
+                        <button className='bg-[#1d5ce2] text-white p-3 rounded-md w-[100%] mt-2' onClick={() => handleRegisterSubmit()}>Sign Up</button>
 
                         <div className='buttom'>
 

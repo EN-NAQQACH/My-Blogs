@@ -1,13 +1,16 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { playfair } from "@/styles/Fonts";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Link from 'next/link';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import XIcon from '@mui/icons-material/X';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-function page() {
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+function Post() {
+  const [showreplies, setShowreplies] = useState(false)
+  const [hidereplies, sethidereplies] = useState(false)
+  const [addReply, setAddReply] = useState(false)
   return (
     <>
 
@@ -41,8 +44,8 @@ function page() {
               <div >
                 <p>By Mohssine </p>
               </div>
-              <div>
-                <p>posted on May 23, 2024</p>
+              <div className=''>
+                <p> <span>posted on </span><span className=''>May 23, 2024</span></p>
               </div>
             </div>
             <div className='content mt-[15px] '>
@@ -83,89 +86,99 @@ function page() {
                     <p className='text-[20px]'>
                       Share
                     </p>
-                    <div>
+                    <div className='cursor-pointer'>
                       <InstagramIcon />
                     </div>
-                    <div>
+                    <div className='cursor-pointer'>
                       <FacebookOutlinedIcon />
                     </div>
-                    <div>
+                    <div className='cursor-pointer'>
                       <XIcon />
                     </div>
                   </div>
                 </div>
                 <div className='tags mt-10'>
                   <div className='flex items-center gap-2'>
-                      <p>Tags :</p>
-                      <div className='flex gap-2 flex-wrap'>
-                            <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300 rounded-md'>fashion</Link>
-                            <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>coding</Link>
-                            <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>culture</Link>
-                            <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>food</Link>
-                            <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>travel</Link>
-                        </div>
+                    <p>Tags :</p>
+                    <div className='flex gap-2 flex-wrap'>
+                      <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300 rounded-md'>fashion</Link>
+                      <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>coding</Link>
+                      <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>culture</Link>
+                      <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>food</Link>
+                      <Link href='/' className='pl-3 text-[13px] pt-1 pb-1 pr-3 border hover:bg-gray-300  rounded-md'>travel</Link>
+                    </div>
                   </div>
                 </div>
                 <div className='comments mt-5 w-[100%] '>
                   <div className='comments-content'>
                     <p className='text-[16px]'>Comments</p>
                     <div className='mt-2'>
-                      <textarea name="comment" id="" className='border rounded-lg w-[100%] h-[100px] p-[2px] outline-none'></textarea>
+                      <textarea name="comment" id="" placeholder='write a comment' className='border rounded-lg w-[100%] text-[12px] h-[100px] p-[2px] pl-[7px] outline-none'></textarea>
                     </div>
                     <div className='flex justify-end'>
                       <button className='text-[black] bg-[#f0f0f0] pl-4 pt-1 pb-1  pr-4 rounded-lg'>comment</button>
                     </div>
                     <div className='allcomments flex flex-col gap-3 mt-3'>
-                      <div className='user-comment flex gap-2 items-center bg-[#cccccc21] p-2 rounded-lg'>
-                        <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
-                          <img src="/travel.jpg" alt="" className='object-cover w-full h-full' />
-                        </div>
-                        <div className='flex justify-between w-[100%]'>
-                          <div className=''>
-                            <p className=''>
-                              <a href='#'>@mohssine</a>
-                              <span className='text-[10px] ml-2 text-gray-400'>2023.04.15</span>
-                            </p>
-                            <p className='text-[14px]'>
-                              This is a comment from mohssine
-                            </p>
-                            <div>
-                              <button className='pl-3 text-[10px] rounded-lg pt-1 bg-[#b4b4b41f] pb-1 pr-3'>reply</button>
+                      <div className='user-comment flex flex-col gap-2'>
+
+                        <div className='flex gap-2 items-start bg-[#e6e6e621] p-2 rounded-lg'>
+                          <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
+                            <img src="/travel.jpg" alt="" className='object-cover w-full h-full' />
+                          </div>
+                          <div className='flex justify-between w-[100%]'>
+                            <div className='flex flex-col gap-4'>
+                              <p className=''>
+                                <a href='#'>@mohssine</a>
+                                <span className='text-[10px] ml-2 text-gray-400'>2023.04.15</span>
+                              </p>
+                              <p className='text-[14px]'>
+                                This is a comment from mohssine
+                              </p>
+                              <div className='flex gap-3 items-center'>
+                                <button onClick={() => setShowreplies(true)} className='pl-3 text-[10px] rounded-lg pt-1 bg-[#b4b4b41f] pb-1 pr-3'>5 reply</button>
+                                <button className='pl-3 text-[10px] underline pt-1 pb-1 pr-3'>reply</button>
+                              </div>
+                            </div>
+                            <div className='border-1 flex justify-center items-center p-1 rounded-md w-fit h-fit' >
+                              <DeleteOutlineIcon style={{ fontSize: '15px' }} />
                             </div>
                           </div>
-                          <div className=''>
-                            <MoreHorizIcon />
-                          </div>
+
                         </div>
-                      </div>
-                      <div className='user-comment flex gap-2 items-center bg-[#cccccc21] p-2 rounded-lg'>
-                        <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
-                          <img src="/travel.jpg" alt="" className='object-cover w-full h-full' />
-                        </div>
-                        <div className='flex justify-between w-[100%]'>
-                          <div className=''>
-                            <p className=''>
-                              <a href='#'>@mohssine</a>
-                              <span className='text-[10px] ml-2 text-gray-400'>2023.04.15</span>
-                            </p>
-                            <p className='text-[14px]'>
-                              This is a comment from mohssine
-                            </p>
-                            <div>
-                              <button className='pl-3 text-[10px] rounded-lg pt-1 bg-[#b4b4b41f] pb-1 pr-3'>reply</button>
+                        {showreplies &&
+                          <div className='ml-8 flex gap-2 items-start bg-[#e6e6e621] p-2 rounded-lg'>
+                            <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
+                              <img src="/travel.jpg" alt="" className='object-cover w-full h-full' />
                             </div>
+                            <div className='flex justify-between w-[100%]'>
+                              <div className='flex flex-col gap-4'>
+                                <p className=''>
+                                  <a href='#'>@mohssine</a>
+                                  <span className='text-[10px] ml-2 text-gray-400'>2023.04.15</span>
+                                </p>
+                                <p className='text-[14px]'>
+                                  This is a comment from mohssine
+                                </p>
+                                <div className='flex gap-3 items-center'>
+                                  <button  className='pl-3 text-[10px] rounded-lg pt-1 bg-[#b4b4b41f] pb-1 pr-3'>5 reply</button>
+                                  <button className='pl-3 text-[10px] underline pt-1 pb-1 pr-3'>reply</button>
+                                </div>
+                              </div>
+                              <div className='border-1 flex justify-center items-center p-1 rounded-md w-fit h-fit' >
+                                <DeleteOutlineIcon style={{ fontSize: '15px' }} />
+                              </div>
+                            </div>
+
                           </div>
-                          <div className=''>
-                            <MoreHorizIcon />
-                          </div>
-                        </div>
+                        }
+
                       </div>
                     </div>
                   </div>
 
                 </div>
 
-              
+
               </article>
             </div>
           </div>
@@ -177,4 +190,4 @@ function page() {
   )
 }
 
-export default page
+export default Post
