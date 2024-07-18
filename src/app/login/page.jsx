@@ -10,14 +10,30 @@ import { MdOutlinePassword } from "react-icons/md";
 import { playfair } from '@/styles/Fonts';
 // import sign from next-auth
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 function page() {
     const [password, setpassword] = useState();
+    const router = useRouter();
+    const [email, setemail] = useState();
     const [passwordvisible, setpasswordvisible] = useState(false);
     const handlepasswordvisible = () => {
         setpasswordvisible(!passwordvisible)
     }
-
+    const handlelogin = async (e) => {
+        e.preventDefault();
+        const res = await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+        },
+    );
+        if (res.ok) {
+            router.push('/dashboard');
+        } else {
+            console.error(res.error);
+        }
+    };
     return (
         <div className='p-[60px] h-lvh flex flex-col items-center gap-0 justify-end '>
 
@@ -50,7 +66,7 @@ function page() {
                             <label htmlFor="" className='text-[13px] mb-2 block'>Email Adress</label>
                             <div className='flex items-center gap-2 p-2 border rounded-md'>
                                 <MdOutlineEmail />
-                                <input type="text" placeholder='Email' className='outline-none w-full text-[12px]' />
+                                <input type="text" value={email} onChange={(e) => setemail(e.target.value)} placeholder='Email' className='outline-none w-full text-[12px]' />
                             </div>
                         </div>
                         <div >
@@ -66,7 +82,7 @@ function page() {
                                 </div>
                             </div>
                         </div>
-                        <button className='bg-[black] text-white p-3 rounded-md w-[100%] mt-2'>Log in</button>
+                        <button onClick={handlelogin} className='bg-[black] text-white p-3 rounded-md w-[100%] mt-2'>Log in</button>
 
                         <div className='buttom'>
                             {/* <div className='flex items-center justify-center mb-5 mt-3'>

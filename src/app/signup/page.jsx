@@ -9,6 +9,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlinePassword } from "react-icons/md";
 import { playfair } from '@/styles/Fonts';
 import { signIn } from 'next-auth/react';
+import { message } from 'antd';
 
 function page() {
     const [email, setemail] = useState();
@@ -26,7 +27,7 @@ function page() {
     const handleRegisterSubmit = async () => {
         
         if (password !== confirmpassword) {
-            alert("Passwords do not match");
+            message.error("Passwords do not match");
             return;
         }
         try {
@@ -39,9 +40,9 @@ function page() {
             });
             const data = await res.json();
             if (res.status === 201) {
-                alert("User created successfully");
+                message.success("User created successfully, please log in now");
             } else {
-                alert(data.error);
+                console.log(data.error);
             }
         } catch (err) {
             console.log(err);
