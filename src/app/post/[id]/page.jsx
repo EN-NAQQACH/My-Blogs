@@ -1,11 +1,6 @@
 import React from 'react'
 import { playfair } from "@/styles/Fonts";
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Link from 'next/link';
-// import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
-// import InstagramIcon from '@mui/icons-material/Instagram';
-// import XIcon from '@mui/icons-material/X';
-// import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ReactQuillEditor from '@/components/ReactQuillEditor';
 import { IoIosArrowDown } from "react-icons/io";
 import Comment from '@/components/Comment';
@@ -34,9 +29,6 @@ const getBlog = async (id) => {
   }
 };
 export default async function Page({ params }) {
-  // const [showreplies, setShowreplies] = useState(false)
-  // const [hidereplies, sethidereplies] = useState(false)
-  // const [addReply, setAddReply] = useState(false)
   const { id } = params;
   const post = await getBlog(id);
 
@@ -117,7 +109,7 @@ export default async function Page({ params }) {
                 </div>
 
                 
-                  <Comment />
+                  <Comment blog_id={post._id} blog_author={post.author._id} />
                 
 
               </article>
