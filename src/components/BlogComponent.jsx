@@ -35,6 +35,26 @@ export default function BlogComponent({search}) {
         getBlogs();
     }, [search]);
 
+    const handleRemoveBlog = async (blogId) => {
+        try {
+            const response = await fetch(`/api/blog/removeblog?blogId=${blogId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                cache: 'no-cache',
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error('Failed to remove blog');
+            } else {
+                setblogs(blogs.filter((blog) => blog._id !== blogId));
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         blogs?.map((blog, index) => (
             <div className='blog-card border rounded-md pl-5 pr-5 pt-2 pb-2' key={index}>
@@ -53,9 +73,9 @@ export default function BlogComponent({search}) {
                                 </Link>
                             </div>
                             <div className='post-categorie text-[13px] border-red-600 border-1 pl-[10px] pt-[2px] pb-[2px] pr-[10px] rounded-xl text-red-600'>
-                                <p>
+                                <button onClick={() => handleRemoveBlog(blog._id)}> 
                                     Remove
-                                </p>
+                                </button>
                             </div>
                         </div>
                         <Link href={`/post/${blog._id}`} className='post-infos'>
