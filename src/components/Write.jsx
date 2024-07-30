@@ -33,6 +33,7 @@ function Write() {
     const { tags, setTags } = useContext(TagContext);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
+    const [bannerTitle, setbannerTitle] = useState('');
     const [shortdescription, setshortdescription] = useState('');
 
     const handleParagraphClick = () => {
@@ -59,7 +60,7 @@ function Write() {
             setLoading(false); // End loading
         }
     };
-    const maxlenght = 100;
+    const maxlenght = 200;
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -124,6 +125,7 @@ function Write() {
                 title,
                 content: processedContent,
                 tags,
+                bannerTitle,
                 banner: Banner,
                 author: session.user.id,
                 description: shortdescription,
@@ -138,7 +140,6 @@ function Write() {
             message.error('Error adding blog');
         }
     }
-    console.log(content)
     return (
         <div className='p-[60px] min-h-lvh m-auto  '>
             <div className='mt-10 mb-52'>
@@ -149,6 +150,9 @@ function Write() {
                 <div className='flex justify-center'>
                     <div className='write-section mt-5  min-h-lvh w-[70%] p-5'>
                         <div className='content-write'>
+                            <div className='bannerTitle mt-1 h-[75px] '>
+                                <textarea value={bannerTitle} onChange={(e) => setbannerTitle(e.target.value)} id="" placeholder='Banner Title' className='p-2 text-center text-[25px] text-gray-500 bg-transparent w-full h-[60px] outline-none resize-none  focus:placeholder:opacity-20'></textarea>
+                            </div>
                             {Banner &&
                                 <div onClick={handleParagraphClick} className='flex items-center gap-2 p-2 border justify-center rounded-3xl mb-3 cursor-pointer hover:bg-gray-50'>
                                     <LuUpload size={25} />
