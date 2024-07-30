@@ -1,22 +1,73 @@
 'use client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react';
+import NotificationsComments from '@/components/NotificationsComments'
 
 function Notifications() {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
+  const [filter, setfilter] = useState('comments');
+  const [comments, setComments] = useState([]);
+  const [isClient, setIsClient] = useState(false)
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  let filters = ['comments', 'replies'];
+  const { data: session, status } = useSession();
+  const iduser = session?.user?.id
+  const fetchComments = async () => {
+    if (!iduser) {
+      console.log('User ID is not defined');
+      return;
+    }
+    try {
+      const res = await fetch(`/api/comment/getauthorcomments?author_id=${iduser}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache',
+      })
+      const data = await res.json();
+      if (res.ok) {
+        setComments(data.comments)
+      } else {
+        console.log(data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchComments();
+    }
+  }, [status, iduser])
   return (
-    <div className='w-full'>
-      <div>Recent Notifications</div>
+    <>
+{isClient &&
+ <>
+  <head>
+        <title>Notifications</title>
+        <meta name="description" />
+      </head>
+      <div className='w-full min-h-lvh'>
+        <div>Recent Notifications</div>
 
-      <div className='main p-4 h-lvh mt-3'>
-        <div className='header'>
-          <div className='text-[13px] flex gap-3'>
-            <button className='pl-5 pr-5 pt-1 pb-1 rounded-3xl bg-gray-200'>All</button>
-            <button className='pl-5 pr-5 pt-1 pb-1 rounded-3xl bg-gray-200'>Comments</button>
-            <button className='pl-5 pr-5 pt-1 pb-1 rounded-3xl bg-gray-200'>Reply</button>
+        <div className='main p-4 min-h-lvh mt-3'>
+          <div className='header'>
+            <div className='text-[13px] flex gap-3'>
+              {filters.map((filterName, index) => {
+                return <button key={index} className={(filter === filterName ? 'bg-black text-white pl-5 pr-5 pt-1 pb-1 rounded-3xl ' : 'bg-gray-200 pl-5 pr-5 pt-1 pb-1 rounded-3xl border')} onClick={() => setfilter(filterName)}>{filterName}</button>
+              })}
+            </div>
           </div>
-        </div>
-        <section className='main-content p-4'>
+          <div className='content mt-5 '>
+
+            <NotificationsComments comments={comments} filter={filter} setComments={setComments} />
+
+          </div>
+          {/* <section className='main-content p-4'>
           <main className='Comment-content mt-5 flex flex-col gap-3'>
 
             <div className='comment flex gap-3  border-b-1 pb-3 w-[100%]'>
@@ -139,9 +190,12 @@ function Notifications() {
               </div>
             </div>
           </main>
-        </section>
+        </section> */}
+        </div>
       </div>
-    </div>
+      </>
+      }
+    </>
   )
 }
 
