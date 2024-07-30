@@ -9,13 +9,14 @@ import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlinePassword } from "react-icons/md";
 import { playfair } from '@/styles/Fonts';
 // import sign from next-auth
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 function page() {
     const [password, setpassword] = useState();
     const router = useRouter();
     const [email, setemail] = useState();
+    const [loading, setLoading] = useState(false);
     const [passwordvisible, setpasswordvisible] = useState(false);
     const handlepasswordvisible = () => {
         setpasswordvisible(!passwordvisible)
@@ -27,11 +28,10 @@ function page() {
             email,
             password,
         },
-    );
-        if (res.ok) {
-            router.push('/dashboard');
+        );
+        if (res?.ok) {
+                router.push("/dashboard");
         } else {
-            console.error(res.error);
         }
     };
     return (
@@ -43,13 +43,13 @@ function page() {
                         <p className='text-[20px]'>Hi, Welcome Back!</p>
                     </div>
                     <div className='google-facebooklogin flex gap-5 mt-4'>
-                        <div onClick={() => signIn('google', { callbackUrl: '/dashboard' }) } className='googlebtn cursor-pointer flex items-center gap-2 border p-[6px] w-[100%] justify-center rounded-md bg-black text-white'>
+                        <div onClick={() => signIn('google', { callbackUrl: '/dashboard' })} className='googlebtn cursor-pointer flex items-center gap-2 border p-[6px] w-[100%] justify-center rounded-md bg-black text-white'>
                             <div className='w-[20px] h-[20px] '>
                                 <img src="/Google__G__logo.svg.png" alt="" className='w-full h-full object-cover' />
                             </div>
                             <p className='text-[13px]'>Sign in with Google</p>
                         </div>
-                        <div onClick={() => signIn('facebook', { callbackUrl: "/dashboard"}) } className='facebookbtn cursor-pointer flex items-center gap-2 border p-[6px] w-[100%] justify-center rounded-md'>
+                        <div onClick={() => signIn('facebook', { callbackUrl: "/dashboard" })} className='facebookbtn cursor-pointer flex items-center gap-2 border p-[6px] w-[100%] justify-center rounded-md'>
                             <div className='w-[20px] h-[20px] '>
                                 <img src="/Facebook.png" alt="" className='w-full h-full object-cover' />
                             </div>
@@ -82,8 +82,10 @@ function page() {
                                 </div>
                             </div>
                         </div>
-                        <button onClick={handlelogin} className='bg-[black] text-white p-3 rounded-md w-[100%] mt-2'>Log in</button>
-
+                        <button onClick={handlelogin} className='bg-[black] text-white p-3 rounded-md w-[100%] mt-2'>
+                            login
+                        </button>
+                        
                         <div className='buttom'>
                             {/* <div className='flex items-center justify-center mb-5 mt-3'>
                                 <Link href="/" 
